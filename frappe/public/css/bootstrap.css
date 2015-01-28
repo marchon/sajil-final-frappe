@@ -1389,6 +1389,7 @@ pre code {
 @media (min-width: 1200px) {
   .container {
     width: 1170px;
+    max-width: 1000px;
   }
 }
 .container-fluid {
@@ -3920,9 +3921,11 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 @media (min-width: 768px) {
   .navbar-left {
     float: left !important;
+   padding-top:30px;
   }
   .navbar-right {
     float: right !important;
+  padding-top:30px;
   }
 }
 .navbar-form {

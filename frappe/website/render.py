@@ -131,7 +131,7 @@ def build_page(path):
 
 	if can_cache(context.no_cache):
 		frappe.cache().set_value("page:" + path, html)
-
+	clear_cache()
 	return html
 
 def is_ajax():

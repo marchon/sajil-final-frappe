@@ -198,9 +198,52 @@
    "permlevel": 0
   }, 
   {
+   "fieldname": "contact_no", 
+   "fieldtype": "Data", 
+   "label": "Contact No", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
+   "fieldname": "skills", 
+   "fieldtype": "Data", 
+   "label": "Skills", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
+   "fieldname": "experience", 
+   "fieldtype": "Select", 
+   "label": "Experience", 
+   "options": "\n0 - 2 Years\n2 - 4 Years\n4 - 6 Years\n6 - 8 Years\n8 Years and Above", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
    "fieldname": "column_break_22", 
    "fieldtype": "Column Break", 
    "permlevel": 0
+  }, 
+  {
+   "fieldname": "resume", 
+   "fieldtype": "Attach", 
+   "label": "Resume", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
+   "fieldname": "video_resume", 
+   "fieldtype": "Attach", 
+   "label": "Video Resume", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
+   "fieldname": "linkedin_profile_url", 
+   "fieldtype": "Data", 
+   "label": "LinkedIn Profile URL", 
+   "permlevel": 0, 
+   "precision": ""
   }, 
   {
    "fieldname": "bio", 
@@ -209,6 +252,21 @@
    "no_copy": 1, 
    "permlevel": 0, 
    "set_only_once": 0
+  }, 
+  {
+   "fieldname": "job_applied_details", 
+   "fieldtype": "Section Break", 
+   "label": "Job Applied Details", 
+   "permlevel": 0, 
+   "precision": ""
+  }, 
+  {
+   "fieldname": "job_applied", 
+   "fieldtype": "Table", 
+   "label": "Job Applied", 
+   "options": "Job Applied", 
+   "permlevel": 0, 
+   "precision": ""
   }, 
   {
    "description": "Check / Uncheck roles assigned to the User. Click on the Role to find out what permissions that Role has.", 
@@ -462,7 +520,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 5, 
- "modified": "2014-09-08 06:07:20.157915", 
+ "modified": "2015-01-06 18:40:12.231464", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "User", 

@@ -6,7 +6,7 @@ import frappe, json
 from frappe.website.website_generator import WebsiteGenerator
 from frappe import _
 from frappe.utils.file_manager import save_file, remove_file_by_url
-
+from frappe import msgprint, _
 class WebForm(WebsiteGenerator):
 	template = "templates/generators/web_form.html"
 	condition_field = "published"
@@ -45,10 +45,64 @@ class WebForm(WebsiteGenerator):
 def accept():
 	args = frappe.form_dict
 	files = []
+	web_form = frappe.get_doc("Web Form", args.web_form)
+	if args.web_form=='edit-profile':
+	    args.name=frappe.session.user
+	# gangadhar
+	if args.name:
+		#frappe.errprint("in the update")   
+		# update
+		doc = frappe.get_doc(args.doctype, args.name)
+	else:
+		# insert
+		#frappe.errprint("insert")
+		#frappe.errprint(args.doctype)
+		doc = frappe.new_doc(args.doctype)
 
+		# set values
+	for fieldname, value in args.iteritems():
+			if fieldname not in ("web_form", "cmd", "owner"):
+				if value and value.startswith("{"):
+					try:
+						filedata = json.loads(value)
+						if "__file_attachment" in filedata:
+							files.append((fieldname, filedata))
+							continue
+
+					except ValueError:
+						pass
+
+				doc.set(fieldname, value)
+	if files:
+			flag=attach_file(files,doc)
+			if flag:
+				#frappe.errprint("f")
+				#frappe.errprint(flag)
+				#doc.insert(ignore_permissions = True)
+				doc.save()
+	if args.name:
+		if doc.owner==frappe.session.user:
+			doc.save(ignore_permissions=True)
+		else:
+			# only if permissions are present
+			doc.save()
+
+	else:
+		# insert
+		if web_form.login_required and frappe.session.user=="Guest":
+			frappe.throw(_("You must login to submit this form"))
+
+		doc.insert(ignore_permissions = True)
+"""
 	web_form = frappe.get_doc("Web Form", args.web_form)
 	if args.doctype != web_form.doc_type:
 		frappe.throw(_("Invalid Request"))
+
+	# gangadhar
+	if args.web_form=='edit-profile':
+	    args.name=frappe.session.user
+	
+	# gangadhar
 
 	if args.name:
 		# update
@@ -88,21 +142,61 @@ def accept():
 
 	# add files
 	if files:
+		# pranali
+		flag=attach_file(files,doc)
+		if flag:
+			#frappe.errprint("f")
+			#frappe.errprint(flag)
+			doc.insert(ignore_permissions = True)
+			doc.save()
+		# pranali
+		#for f in files:
+		#	fieldname, filedata = f
+		#
+		#	# remove earlier attachmed file (if exists)
+		#	if doc.get(fieldname):
+		#		remove_file_by_url(doc.get(fieldname), doc.doctype, doc.name)
+		#
+		#	# save new file
+		#	filedoc = save_file(filedata["filename"], filedata["dataurl"],
+		#		doc.doctype, doc.name, decode=True)
+		#				# update values
+		#	doc.set(fieldname, filedoc.file_url)
+		#
+		#doc.save()
+
+"""
+
+def attach_file(files,doc):
+	#frappe.errprint("in the attach_file")
+	if files:
 		for f in files:
 			fieldname, filedata = f
+			if fieldname =='resume':
+				if files[0][1]['filename'].split('.')[-1] == 'pdf' or files[0][1]['filename'].split('.')[-1] == 'docx'  or files[0][1]['filename'].split('.')[-1] == 'doc':
+					#frappe.errprint(files[0][1]['filename'])
+					if doc.get(fieldname):
+						remove_file_by_url(doc.get(fieldname), doc.doctype, doc.name)
+					filedoc = save_file(filedata["filename"], filedata["dataurl"],
+						doc.doctype, doc.name, decode=True)
+					doc.set(fieldname, filedoc.file_url)
+					return True
+				else:
+					msgprint(_("Please Attach Valid Resume Document"),raise_exception=1)		
+					return False
+			elif fieldname =='video_resume':
+				if files[0][1]['filename'].split('.')[-1] == 'mp4':
+					#frappe.errprint(files[0][1]['filename'])
+					if doc.get(fieldname):
+						remove_file_by_url(doc.get(fieldname), doc.doctype, doc.name)
+					filedoc = save_file(filedata["filename"], filedata["dataurl"],
+						doc.doctype, doc.name, decode=True)
+					doc.set(fieldname, filedoc.file_url)
+					return True
+				else:
+					msgprint(_("Please Attach Valid Resume Document"),raise_exception=1)		
+					return False
 
-			# remove earlier attachmed file (if exists)
-			if doc.get(fieldname):
-				remove_file_by_url(doc.get(fieldname), doc.doctype, doc.name)
-
-			# save new file
-			filedoc = save_file(filedata["filename"], filedata["dataurl"],
-				doc.doctype, doc.name, decode=True)
-
-			# update values
-			doc.set(fieldname, filedoc.file_url)
-
-		doc.save()
 
 @frappe.whitelist()
 def delete(web_form, name):

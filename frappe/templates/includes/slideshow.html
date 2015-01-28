@@ -2,7 +2,7 @@
 {{ slideshow_header }}
 
 
-<div id="the-carousel" class="carousel slide">
+<div id="the-carousel" class="carousel slide" style="height:300px; width:960px;">
 	<!-- Indicators -->
 	<ol class="carousel-indicators">
 		{% for slide in slides %}
@@ -12,10 +12,10 @@
 	</ol>
 	
 	<!-- Wrapper for slides -->
-	<div class="carousel-inner">
+	<div class="carousel-inner" style="height:300px; width:960px;">
 		{% for slide in slides %}
-		<div class="{% if slide.idx==1 %}active {% endif %}item">
-			<img src="{{ slide.image }}" class="slide-image" />
+		<div class="{% if slide.idx==1 %}active {% endif %}item" style="height:300px; width:960px;">
+			<img src="{{ slide.image }}" class="slide-image" style="height:300px; width:960px;" />
 			{% if slide.heading or slide.description %}
 			<div class="carousel-caption">
 				{% if slide.heading %}<h4>{{ slide.heading }}</h4>{% endif %}
@@ -27,13 +27,13 @@
 	</div>
 
 	<!-- Controls -->
-	<a class="left carousel-control" href="#the-carousel" data-slide="prev">
+	<a class="left carousel-control" href="#the-carousel" data-slide="prev" style="height:320px;">
 		<span class="icon icon-chevron-left"></span>
 	</a>
-	<a class="right carousel-control" href="#the-carousel" data-slide="next">
+	<a class="right carousel-control" href="#the-carousel" data-slide="next" style="height:320px;">
 		<span class="icon icon-chevron-right"></span>
 	</a>
 </div>
 
 <script>$(".carousel").carousel();</script>
-{% endif %}
+{% endif %} 
